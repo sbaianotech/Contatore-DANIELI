@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contatore Vocale</title>
+  <style>
+    body { font-family: sans-serif; text-align: center; padding: 20px; background: #121212; color: white; }
+    #conteggio { font-size: 80px; font-weight: bold; color: #00ff88; margin: 20px 0; }
+    button { padding: 15px 30px; font-size: 18px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; }
+    #trascrizione { font-size: 14px; color: #aaa; margin-top: 20px; height: 100px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+
+  <h1>Contatore "DANIELI"</h1>
+  <div id="conteggio">0</div>
+  <button id="btnStart" onclick="gestisciAscolto()">Avvia Ascolto</button>
+
+  <h3>Ultime parole sentite:</h3>
+  <div id="trascrizione">In attesa...</div>
+
+  <script>
+    const PAROLA_TARGET = "danieli";
+    let contatore = 0;
+    let ascoltoAttivo = false;
+
+    // Verifica il supporto del browser
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Il tuo browser non supporta il riconoscimento vocale. Usa Chrome o Safari.");
+    } else {
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'it-IT';
+      recognition.continuous = true;     // Non si ferma dopo ogni frase
+      recognition.interimResults = false; // Prende solo i risultati definitivi
+
+      recognition.onresult = (event) => {
+        const lastIndex = event.results.length - 1;
+        const testo = event.results[lastIndex][0].transcript.toLowerCase();
+        
+        document.getElementById('trascrizione').innerText = testo;
+
+        // Controlla quante volte compare la parola (o varianti comuni come "daniele")
+        const occorrenze = (testo.match(/danieli|daniele/g) || []).length;
+        if (occorrenze > 0) {
+          contatore += occorrenze;
+          document.getElementById('conteggio').innerText = contatore;
+        }
+      };
+
+      // Riavvia automaticamente l'ascolto se cade per pause prolungate
+      recognition.onend = () => {
+        if (ascoltoAttivo) recognition.start();
+      };
+
+      function gestisciAscolto() {
+        const btn = document.getElementById('btnStart');
+        if (!ascoltoAttivo) {
+          ascoltoAttivo = true;
+          recognition.start();
+          btn.innerText = "Interrompi Ascolto";
+          btn.style.background = "#dc3545";
+        } else {
+          ascoltoAttivo = false;
+          recognition.stop();
+          btn.innerText = "Avvia Ascolto";
+          btn.style.background = "#007bff";
+        }
+      }
+    }
+  </script>
+</body>
+</html>
