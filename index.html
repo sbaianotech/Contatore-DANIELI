@@ -5,10 +5,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contatore Vocale</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 20px; background: #121212; color: white; }
-    #conteggio { font-size: 80px; font-weight: bold; color: #00ff88; margin: 20px 0; }
-    button { padding: 15px 30px; font-size: 18px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; }
-    #trascrizione { font-size: 14px; color: #aaa; margin-top: 20px; height: 100px; overflow-y: auto; }
+    body { 
+      font-family: sans-serif; 
+      text-align: center; 
+      color: white; 
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      /* Collega l'immagine caricata come sfondo */
+      background: url('cavallo.jpg') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+    }
+    
+    /* Velo scuro per rendere il testo e i numeri ben leggibili sopra l'immagine */
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.65);
+      z-index: -1;
+    }
+
+    h1 { font-size: 24px; margin-bottom: 10px; color: #ddd; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+    #conteggio { font-size: 100px; font-weight: bold; color: #00ff88; margin: 10px 0 30px 0; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); }
+    button { padding: 15px 35px; font-size: 18px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
   </style>
 </head>
 <body>
@@ -16,40 +40,31 @@
   <h1>Contatore "DANIELI"</h1>
   <div id="conteggio">0</div>
   <button id="btnStart" onclick="gestisciAscolto()">Avvia Ascolto</button>
-  
-  <h3>Ultime parole sentite:</h3>
-  <div id="trascrizione">In attesa...</div>
-  
+
   <script>
-    const PAROLA_TARGET = "danieli";
     let contatore = 0;
     let ascoltoAttivo = false;
 
-    // Verifica il supporto del browser
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
       alert("Il tuo browser non supporta il riconoscimento vocale. Usa Chrome o Safari.");
     } else {
       const recognition = new SpeechRecognition();
       recognition.lang = 'it-IT';
-      recognition.continuous = true;     // Non si ferma dopo ogni frase
-      recognition.interimResults = false; // Prende solo i risultati definitivi
+      recognition.continuous = true;
+      recognition.interimResults = false;
 
       recognition.onresult = (event) => {
         const lastIndex = event.results.length - 1;
-        const testo = event.results[lastIndex][0].transcript.toLowerCase();
-        
-        document.getElementById('trascrizione').innerText = testo;
+        let testo = event.results[lastIndex][0].transcript.toLowerCase();
 
-        // Controlla quante volte compare la parola (o varianti comuni come "daniele")
-        const occorrenze = (testo.match(/danieli|daniele/g) || []).length;
+        const occorrenze = (testo.match(/daniel[ie]/g) || []).length;
         if (occorrenze > 0) {
           contatore += occorrenze;
           document.getElementById('conteggio').innerText = contatore;
         }
       };
 
-      // Riavvia automaticamente l'ascolto se cade per pause prolungate
       recognition.onend = () => {
         if (ascoltoAttivo) recognition.start();
       };
