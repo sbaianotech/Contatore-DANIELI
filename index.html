@@ -17,6 +17,9 @@
   <div id="conteggio">0</div>
   <button id="btnStart" onclick="gestisciAscolto()">Avvia Ascolto</button>
 
+  <h3>Ultime parole sentite:</h3>
+  <div id="trascrizione">In attesa...</div>
+
   <script>
     const PAROLA_TARGET = "danieli";
     let contatore = 0;
@@ -39,7 +42,7 @@
         document.getElementById('trascrizione').innerText = testo;
 
         // Controlla quante volte compare la parola (o varianti comuni come "daniele")
-        const occorrenze = (testo.match(/danieli/g) || []).length;
+        const occorrenze = (testo.match(/danieli|daniele/g) || []).length;
         if (occorrenze > 0) {
           contatore += occorrenze;
           document.getElementById('conteggio').innerText = contatore;
