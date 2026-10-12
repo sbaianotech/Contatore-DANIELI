@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contatore Vocale Festoso</title>
+  <title>Contatore Vocale</title>
   <style>
     body { 
-      font-family: sans-serif; 
+      font-family: system-ui, -apple-system, sans-serif; 
       text-align: center; 
       color: white; 
       margin: 0;
@@ -17,18 +17,9 @@
       align-items: center;
       padding: 10px;
       box-sizing: border-box;
-      background: url('sfondo.jpg') no-repeat center center fixed;
-      background-size: cover;
+      background-color: #0d0d0d;
       position: relative;
-      overflow: hidden; /* Evita barre di scorrimento quando volano le emoji */
-    }
-    
-    body::before {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      z-index: -1;
+      overflow: hidden;
     }
 
     .container-colonne {
@@ -37,7 +28,7 @@
       justify-content: center;
       gap: 20px;
       width: 100%;
-      max-width: 450px;
+      max-width: 420px;
       margin-bottom: 40px;
       position: relative;
     }
@@ -52,10 +43,11 @@
       100% { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; }
     }
 
+    /* Box parole rotondi */
     .contatore-card {
-      background: rgba(0, 0, 0, 0.6);
-      width: 130px;
-      height: 130px;
+      background: rgba(255, 255, 255, 0.05);
+      width: 135px;
+      height: 135px;
       border-radius: 50%;
       border: 3px solid #ff0000;
       animation: rainbowGlow 6s infinite linear;
@@ -66,31 +58,39 @@
       padding: 10px;
       box-sizing: border-box;
       position: relative;
+      cursor: pointer;
     }
 
-    .etichetta { font-size: 13px; color: #fff; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
-    .valore { font-size: 36px; font-weight: bold; color: #00ff88; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); margin-top: 2px; }
+    .etichetta { font-size: 13px; color: #aaa; font-weight: bold; letter-spacing: 1px; }
+    .valore { font-size: 38px; font-weight: bold; color: #00ff88; margin-top: 2px; }
 
-    /* Box ascolto a sorriso */
-    button { 
+    /* Contenitore per dare l'ombra al pulsante con forma curva */
+    .btn-container {
       width: 85%;
       max-width: 320px;
-      padding: 15px 20px; 
-      font-size: 16px; 
+      filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.7));
+    }
+
+    /* Pulsante di ascolto con bordi centrali e perimetrali curvati a sorriso */
+    button { 
+      width: 100%;
+      padding: 18px 20px; 
+      font-size: 17px; 
       border: none; 
-      border-radius: 20px 20px 50px 50px; 
       background: #007bff; 
       color: white; 
       cursor: pointer; 
-      box-shadow: 0 6px 15px rgba(0,0,0,0.6); 
       font-weight: bold;
       transition: background 0.3s;
+      /* Curvatura totale concava al centro (sorriso) */
+      clip-path: ellipse(100% 75% at 50% 25%);
+      border-radius: 0 0 40px 40px;
     }
 
-    /* Stile per l'emoji volante */
+    /* Stile per le emoji volanti */
     .emoji-volante {
       position: absolute;
-      font-size: 30px;
+      font-size: 32px;
       pointer-events: none;
       animation: volaVersoAlto 1.2s ease-out forwards;
       z-index: 10;
@@ -102,7 +102,7 @@
         opacity: 1;
       }
       100% {
-        transform: translateY(-120px) scale(1.4);
+        transform: translateY(-130px) scale(1.4);
         opacity: 0;
       }
     }
@@ -111,20 +111,22 @@
 <body>
 
   <div class="container-colonne">
-    <!-- Colonna 1: Danieli -->
-    <div class="contatore-card" id="card1">
+    <!-- Colonna 1: Danieli (Birra 🍺) -->
+    <div class="contatore-card" id="card1" onclick="incrementa('danieli')">
       <div class="etichetta">DANIELI</div>
       <div id="count1" class="valore">0</div>
     </div>
 
-    <!-- Colonna 2: Pettorina -->
-    <div class="contatore-card" id="card2">
+    <!-- Colonna 2: Pettorina (Missile 🚀) -->
+    <div class="contatore-card" id="card2" onclick="incrementa('pettorina')">
       <div class="etichetta">PETTORINA</div>
       <div id="count2" class="valore">0</div>
     </div>
   </div>
 
-  <button id="btnStart" onclick="gestisciAscolto()">Avvia Ascolto</button>
+  <div class="btn-container">
+    <button id="btnStart" onclick="gestisciAscolto()">Avvia Ascolto</button>
+  </div>
 
   <script>
     let contatori = {
@@ -134,25 +136,33 @@
     
     let ascoltoAttivo = false;
 
-    // Scegli l'emoji che preferisci: '🍺' oppure '🚀' (o mettile entrambe in un array se vuoi alternarle)
-    const emojiFesta = '🍺'; 
-
-    function lanciaEmoji(elementId) {
-      const card = document.getElementById(elementId);
+    // Funzione per sparare l'emoji corretta dal box corrispondente
+    function lanciaEmoji(cardId, emojiIcona) {
+      const card = document.getElementById(cardId);
       const emoji = document.createElement('div');
       emoji.classList.add('emoji-volante');
-      emoji.innerText = emojiFesta;
+      emoji.innerText = emojiIcona;
       
-      // Posiziona l'emoji al centro del box
       emoji.style.left = '50px';
-      emoji.style.top = '20px';
+      emoji.style.top = '15px';
       
       card.appendChild(emoji);
 
-      // Rimuove l'elemento HTML dopo che l'animazione è finita
       setTimeout(() => {
         emoji.remove();
       }, 1200);
+    }
+
+    function incrementa(tipo) {
+      if (tipo === 'danieli') {
+        contatori.danieli++;
+        document.getElementById('count1').innerText = contatori.danieli;
+        lanciaEmoji('card1', '🍺');
+      } else if (tipo === 'pettorina') {
+        contatori.pettorina++;
+        document.getElementById('count2').innerText = contatori.pettorina;
+        lanciaEmoji('card2', '🚀');
+      }
     }
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -168,20 +178,16 @@
         const lastIndex = event.results.length - 1;
         let testo = event.results[lastIndex][0].transcript.toLowerCase();
 
+        // Danieli -> Birra 🍺
         const occDanieli = (testo.match(/daniel[ie]/g) || []).length;
         if (occDanieli > 0) {
-          contatori.danieli += occDanieli;
-          document.getElementById('count1').innerText = contatori.danieli;
-          // Lancia l'emoji per Danieli
-          lanciaEmoji('card1');
+          for(let i=0; i<occDanieli; i++) incrementa('danieli');
         }
 
+        // Pettorina -> Missile 🚀
         const occPettorina = (testo.match(/\bpettorina\b/g) || []).length;
         if (occPettorina > 0) {
-          contatori.pettorina += occPettorina;
-          document.getElementById('count2').innerText = contatori.pettorina;
-          // Lancia l'emoji per Pettorina
-          lanciaEmoji('card2');
+          for(let i=0; i<occPettorina; i++) incrementa('pettorina');
         }
       };
 
