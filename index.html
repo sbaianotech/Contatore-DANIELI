@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contatore Vocale Multiplo</title>
+  <title>Contatore Vocale Colonne</title>
   <style>
     body { 
       font-family: sans-serif; 
       text-align: center; 
       color: white; 
       margin: 0;
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: space-around;
+      justify-content: center;
       align-items: center;
-      padding: 20px 0;
+      padding: 10px;
       box-sizing: border-box;
       background: url('sfondo.jpg') no-repeat center center fixed;
       background-size: cover;
@@ -30,26 +30,34 @@
       z-index: -1;
     }
 
-    h1 { font-size: 22px; margin: 0; color: #ddd; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+    h1 { font-size: 20px; margin-bottom: 20px; color: #ddd; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
 
-    .container-box {
+    /* Contenitore per mettere le tre schede in verticale (colonne affiancate) */
+    .container-colonne {
       display: flex;
-      flex-direction: column;
-      gap: 15px;
-      width: 90%;
-      max-width: 400px;
+      flex-direction: row;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 450px;
+      margin-bottom: 25px;
     }
 
     .contatore-card {
       background: rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 10px;
+      padding: 10px 5px;
+      flex: 1;
       backdrop-filter: blur(5px);
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
     }
 
-    .etichetta { font-size: 20px; color: #00ff88; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
-    .valore { font-size: 60px; font-weight: bold; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); margin-top: 5px; }
+    .etichetta { font-size: 14px; color: #00ff88; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); word-break: break-all; }
+    .valore { font-size: 40px; font-weight: bold; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); margin-top: 10px; }
 
     button { padding: 12px 30px; font-size: 16px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
   </style>
@@ -58,14 +66,14 @@
 
   <h1>Contatore Parole</h1>
 
-  <div class="container-box">
+  <div class="container-colonne">
     <!-- Colonna 1: Danieli -->
     <div class="contatore-card">
       <div class="etichetta">DANIELI</div>
       <div id="count1" class="valore">0</div>
     </div>
 
-    <!-- Colonna 2: Swa -->
+    <!-- Colonna 2: Swa (Titolo) / Conta "Sua" -->
     <div class="contatore-card">
       <div class="etichetta">SWA</div>
       <div id="count2" class="valore">0</div>
@@ -83,7 +91,7 @@
   <script>
     let contatori = {
       danieli: 0,
-      swa: 0,
+      sua: 0,
       pettorina: 0
     };
     
@@ -109,11 +117,11 @@
           document.getElementById('count1').innerText = contatori.danieli;
         }
 
-        // Conta Swa
-        const occSwa = (testo.match(/\bswa\b/g) || []).length;
-        if (occSwa > 0) {
-          contatori.swa += occSwa;
-          document.getElementById('count2').innerText = contatori.swa;
+        // Conta "sua" ma mostra il conteggio sotto il titolo "Swa"
+        const occSua = (testo.match(/\bsua\b/g) || []).length;
+        if (occSua > 0) {
+          contatori.sua += occSua;
+          document.getElementById('count2').innerText = contatori.sua;
         }
 
         // Conta Pettorina
