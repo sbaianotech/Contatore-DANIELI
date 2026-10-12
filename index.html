@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contatore Vocale</title>
+  <title>Contatore Vocale Sorridente</title>
   <style>
     body { 
       font-family: sans-serif; 
@@ -37,7 +37,7 @@
       gap: 15px;
       width: 100%;
       max-width: 400px;
-      margin-bottom: 30px;
+      margin-bottom: 35px;
     }
 
     /* Animazione Arcobaleno per i bordi */
@@ -56,7 +56,7 @@
       padding: 15px 10px;
       flex: 1;
       border: 3px solid #ff0000;
-      animation: rainbowGlow 6s infinite linear;
+      animation: rainbowGlog 6s infinite linear;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -66,20 +66,32 @@
     .etichetta { font-size: 16px; color: #fff; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
     .valore { font-size: 50px; font-weight: bold; color: #00ff88; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); margin-top: 10px; }
 
-    button { padding: 14px 35px; font-size: 18px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: bold; }
+    /* Pulsante curvato stile "sorriso" (bordi superiori arrotondati e angoli inferiori molto svasati) */
+    button { 
+      padding: 16px 40px; 
+      font-size: 18px; 
+      border: none; 
+      border-radius: 20px 20px 50px 50px; 
+      background: #007bff; 
+      color: white; 
+      cursor: pointer; 
+      box-shadow: 0 6px 15px rgba(0,0,0,0.6); 
+      font-weight: bold;
+      transition: background 0.3s;
+    }
   </style>
 </head>
 <body>
 
   <div class="container-colonne">
     <!-- Colonna 1: Danieli -->
-    <div class="contatore-card">
+    <div class="contatore-card" style="animation: rainbowGlow 6s infinite linear;">
       <div class="etichetta">DANIELI</div>
       <div id="count1" class="valore">0</div>
     </div>
 
     <!-- Colonna 2: Pettorina -->
-    <div class="contatore-card">
+    <div class="contatore-card" style="animation: rainbowGlow 6s infinite linear;">
       <div class="etichetta">PETTORINA</div>
       <div id="count2" class="valore">0</div>
     </div>
@@ -108,14 +120,12 @@
         const lastIndex = event.results.length - 1;
         let testo = event.results[lastIndex][0].transcript.toLowerCase();
 
-        // Conta Danieli o Daniele
         const occDanieli = (testo.match(/daniel[ie]/g) || []).length;
         if (occDanieli > 0) {
           contatori.danieli += occDanieli;
           document.getElementById('count1').innerText = contatori.danieli;
         }
 
-        // Conta Pettorina
         const occPettorina = (testo.match(/\bpettorina\b/g) || []).length;
         if (occPettorina > 0) {
           contatori.pettorina += occPettorina;
@@ -135,7 +145,7 @@
           btn.innerText = "Interrompi Ascolto";
           btn.style.background = "#dc3545";
         } else {
-          ascoltoAscolto = false;
+          ascoltoAttivo = false;
           recognition.stop();
           btn.innerText = "Avvia Ascolto";
           btn.style.background = "#007bff";
