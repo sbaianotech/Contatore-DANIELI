@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contatore Vocale</title>
+  <title>Contatore Vocale Sorridente</title>
   <style>
     body { 
       font-family: sans-serif; 
@@ -34,10 +34,10 @@
       display: flex;
       flex-direction: row;
       justify-content: center;
-      gap: 20px;
+      gap: 15px;
       width: 100%;
-      max-width: 450px;
-      margin-bottom: 40px;
+      max-width: 400px;
+      margin-bottom: 35px;
     }
 
     /* Animazione Arcobaleno per i bordi */
@@ -50,31 +50,26 @@
       100% { border-color: #ff00ff; box-shadow: 0 0 15px #ff00ff; }
     }
 
-    /* Box parole rotondi e ridimensionati */
     .contatore-card {
       background: rgba(0, 0, 0, 0.6);
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
+      border-radius: 12px;
+      padding: 15px 10px;
+      flex: 1;
       border: 3px solid #ff0000;
-      animation: rainbowGlow 6s infinite linear;
+      animation: rainbowGlog 6s infinite linear;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 10px;
-      box-sizing: border-box;
     }
 
-    .etichetta { font-size: 13px; color: #fff; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
-    .valore { font-size: 36px; font-weight: bold; color: #00ff88; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); margin-top: 2px; }
+    .etichetta { font-size: 16px; color: #fff; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+    .valore { font-size: 50px; font-weight: bold; color: #00ff88; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); margin-top: 10px; }
 
-    /* Box ascolto più lungo, orizzontale e curvato stile sorriso */
+    /* Pulsante curvato stile "sorriso" (bordi superiori arrotondati e angoli inferiori molto svasati) */
     button { 
-      width: 85%;
-      max-width: 320px;
-      padding: 15px 20px; 
-      font-size: 16px; 
+      padding: 16px 40px; 
+      font-size: 18px; 
       border: none; 
       border-radius: 20px 20px 50px 50px; 
       background: #007bff; 
@@ -90,13 +85,13 @@
 
   <div class="container-colonne">
     <!-- Colonna 1: Danieli -->
-    <div class="contatore-card">
+    <div class="contatore-card" style="animation: rainbowGlow 6s infinite linear;">
       <div class="etichetta">DANIELI</div>
       <div id="count1" class="valore">0</div>
     </div>
 
     <!-- Colonna 2: Pettorina -->
-    <div class="contatore-card">
+    <div class="contatore-card" style="animation: rainbowGlow 6s infinite linear;">
       <div class="etichetta">PETTORINA</div>
       <div id="count2" class="valore">0</div>
     </div>
