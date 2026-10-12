@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contatore Vocale Doppi</title>
+  <title>Contatore Vocale</title>
   <style>
     body { 
       font-family: sans-serif; 
@@ -30,8 +30,6 @@
       z-index: -1;
     }
 
-    h1 { font-size: 20px; margin-bottom: 20px; color: #ddd; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
-
     .container-colonne {
       display: flex;
       flex-direction: row;
@@ -39,7 +37,7 @@
       gap: 15px;
       width: 100%;
       max-width: 400px;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
     }
 
     /* Animazione Arcobaleno per i bordi */
@@ -68,12 +66,10 @@
     .etichetta { font-size: 16px; color: #fff; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
     .valore { font-size: 50px; font-weight: bold; color: #00ff88; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); margin-top: 10px; }
 
-    button { padding: 12px 30px; font-size: 16px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    button { padding: 14px 35px; font-size: 18px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); font-weight: bold; }
   </style>
 </head>
 <body>
-
-  <h1>Contatore Parole</h1>
 
   <div class="container-colonne">
     <!-- Colonna 1: Danieli -->
@@ -139,7 +135,7 @@
           btn.innerText = "Interrompi Ascolto";
           btn.style.background = "#dc3545";
         } else {
-          ascoltoAttivo = false;
+          ascoltoAscolto = false;
           recognition.stop();
           btn.innerText = "Avvia Ascolto";
           btn.style.background = "#007bff";
