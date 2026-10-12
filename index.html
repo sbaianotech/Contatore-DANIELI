@@ -3,46 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contatore Vocale</title>
+  <title>Contatore Vocale Multiplo</title>
   <style>
     body { 
       font-family: sans-serif; 
       text-align: center; 
       color: white; 
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-around;
       align-items: center;
-      /* Collega l'immagine caricata come sfondo */
-      background: url('cavallo.jpg') no-repeat center center fixed;
+      padding: 20px 0;
+      box-sizing: border-box;
+      background: url('sfondo.jpg') no-repeat center center fixed;
       background-size: cover;
       position: relative;
     }
     
-    /* Velo scuro per rendere il testo e i numeri ben leggibili sopra l'immagine */
     body::before {
       content: "";
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(0, 0, 0, 0.7);
       z-index: -1;
     }
 
-    h1 { font-size: 24px; margin-bottom: 10px; color: #ddd; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
-    #conteggio { font-size: 100px; font-weight: bold; color: #00ff88; margin: 10px 0 30px 0; text-shadow: 2px 2px 8px rgba(0,0,0,0.8); }
-    button { padding: 15px 35px; font-size: 18px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+    h1 { font-size: 22px; margin: 0; color: #ddd; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
+
+    .container-box {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .contatore-card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px;
+      backdrop-filter: blur(5px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .etichetta { font-size: 20px; color: #00ff88; font-weight: bold; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); }
+    .valore { font-size: 60px; font-weight: bold; color: white; text-shadow: 2px 2px 6px rgba(0,0,0,0.8); margin-top: 5px; }
+
+    button { padding: 12px 30px; font-size: 16px; border: none; border-radius: 8px; background: #007bff; color: white; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
   </style>
 </head>
 <body>
 
-  <h1>Contatore "DANIELI"</h1>
-  <div id="conteggio">0</div>
+  <h1>Contatore Parole</h1>
+
+  <div class="container-box">
+    <!-- Colonna 1: Danieli -->
+    <div class="contatore-card">
+      <div class="etichetta">DANIELI</div>
+      <div id="count1" class="valore">0</div>
+    </div>
+
+    <!-- Colonna 2: Swa -->
+    <div class="contatore-card">
+      <div class="etichetta">SWA</div>
+      <div id="count2" class="valore">0</div>
+    </div>
+
+    <!-- Colonna 3: Pettorina -->
+    <div class="contatore-card">
+      <div class="etichetta">PETTORINA</div>
+      <div id="count3" class="valore">0</div>
+    </div>
+  </div>
+
   <button id="btnStart" onclick="gestisciAscolto()">Avvia Ascolto</button>
 
   <script>
-    let contatore = 0;
+    let contatori = {
+      danieli: 0,
+      swa: 0,
+      pettorina: 0
+    };
+    
     let ascoltoAttivo = false;
 
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -58,10 +102,25 @@
         const lastIndex = event.results.length - 1;
         let testo = event.results[lastIndex][0].transcript.toLowerCase();
 
-        const occorrenze = (testo.match(/daniel[ie]/g) || []).length;
-        if (occorrenze > 0) {
-          contatore += occorrenze;
-          document.getElementById('conteggio').innerText = contatore;
+        // Conta Danieli o Daniele
+        const occDanieli = (testo.match(/daniel[ie]/g) || []).length;
+        if (occDanieli > 0) {
+          contatori.danieli += occDanieli;
+          document.getElementById('count1').innerText = contatori.danieli;
+        }
+
+        // Conta Swa
+        const occSwa = (testo.match(/\bswa\b/g) || []).length;
+        if (occSwa > 0) {
+          contatori.swa += occSwa;
+          document.getElementById('count2').innerText = contatori.swa;
+        }
+
+        // Conta Pettorina
+        const occPettorina = (testo.match(/\bpettorina\b/g) || []).length;
+        if (occPettorina > 0) {
+          contatori.pettorina += occPettorina;
+          document.getElementById('count3').innerText = contatori.pettorina;
         }
       };
 
